@@ -24,6 +24,7 @@ buildscript {
 plugins {
     id 'com.github.hierynomus.license' version '0.13.1'
     id("org.nosphere.apache.rat") version "0.3.1"
+    id "com.jfrog.artifactory" version "4.9.5"
 }
 
 group 'org.apache.fineract.cn'
@@ -77,7 +78,23 @@ publishing {
             from components.java
             groupId project.group
             artifactId project.name
-            version project.version
+            version findProperty('versionFromGitTag') ?: project.version
+        }
+    }
+}
+
+String artifactoryRepoKey = findProperty('versionFromGitTag') ? 'libs-release-local' : 'libs-snapshot-local'
+artifactory {
+    contextUrl = System.getenv("ARTIFACTORY_URL")
+    publish {
+        repository {
+            repoKey = artifactoryRepoKey
+            username = System.getenv("ARTIFACTORY_USER")
+            password = System.getenv("ARTIFACTORY_PASSWORD")
+        }
+
+        defaults {
+            publications ('apiPublication')
         }
     }
 }

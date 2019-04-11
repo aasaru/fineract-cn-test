@@ -1,3 +1,8 @@
+TODO switch to apache and branch to develop!
+
+[![Build Status](https://api.travis-ci.com/aasaru/fineract-cn-test.svg?branch=travis)](https://travis-ci.com/aasaru/fineract-cn-test)
+
+
 # Apache Fineract CN Test
 
 ## Abstract

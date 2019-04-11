@@ -7,7 +7,7 @@ EXIT_STATUS=0
 # Builds and Publishes a SNAPSHOT
 function build_snapshot() {
   echo -e "Building and publishing a snapshot out of branch [$TRAVIS_BRANCH]"
-  ./gradlew -DbuildInfo.build.number=${TRAVIS_COMMIT::7} clean artifactoryPublish --stacktrace || EXIT_STATUS=$?
+  ./gradlew -DbuildInfo.build.number=${TRAVIS_COMMIT::7} clean publishToMavenLocal artifactoryPublish --stacktrace || EXIT_STATUS=$?
 }
 
 # Builds a Pull Request
@@ -25,7 +25,7 @@ function build_otherbranch() {
 # Builds a tag and publishes it as a version
 function build_tag() {
   echo -e "Building tag [$TRAVIS_TAG] and publishing it as a release"
-  ./gradlew -PversionFromGitTag=$TRAVIS_TAG clean artifactoryPublish --stacktrace || EXIT_STATUS=$?
+  ./gradlew -PversionFromGitTag=$TRAVIS_TAG clean publishToMavenLocal artifactoryPublish --stacktrace || EXIT_STATUS=$?
 
 }
 

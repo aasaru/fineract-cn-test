@@ -98,6 +98,8 @@ artifactory {
         }
     }
 }
+artifactoryPublish.dependsOn('clean','publishToMavenLocal')
+
 
 jar {
     from sourceSets.main.allSource

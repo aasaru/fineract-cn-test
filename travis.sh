@@ -7,7 +7,7 @@ EXIT_STATUS=0
 # Builds and Publishes a SNAPSHOT
 function build_snapshot() {
   echo -e "Building and publishing a snapshot out of branch [$TRAVIS_BRANCH]"
-  ./gradlew -DbuildInfo.build.number=${TRAVIS_COMMIT::7} clean publishToMavenLocal artifactoryPublish --stacktrace || EXIT_STATUS=$?
+  ./gradlew -PartifactoryRepoKey=libs-snapshot-local -DbuildInfo.build.number=${TRAVIS_COMMIT::7} artifactoryPublish --stacktrace || EXIT_STATUS=$?
 }
 
 # Builds a Pull Request
@@ -16,16 +16,16 @@ function build_pullrequest() {
   ./gradlew clean build || EXIT_STATUS=$?
 }
 
-# Builds other branches that we don't create snapshots out from
+# For other branches we need to add branch name as prefix
 function build_otherbranch() {
-  echo -e "Building non-snapshots branch [$TRAVIS_BRANCH]. Won't publish anything to Artifactory."
-  ./gradlew clean build || EXIT_STATUS=$?
+  echo -e "Building a snapshot out of branch [$TRAVIS_BRANCH] and publishing it with prefix '${TRAVIS_BRANCH}-SNAPSHOT'"
+  ./gradlew -PartifactoryRepoKey=libs-snapshot-local -DbuildInfo.build.number=${TRAVIS_COMMIT::7} -PexternalVersion=${TRAVIS_BRANCH}-SNAPSHOT artifactoryPublish --stacktrace || EXIT_STATUS=$?
 }
 
-# Builds a tag and publishes it as a version
+# Builds and Publishes a Tag
 function build_tag() {
   echo -e "Building tag [$TRAVIS_TAG] and publishing it as a release"
-  ./gradlew -PversionFromGitTag=$TRAVIS_TAG clean publishToMavenLocal artifactoryPublish --stacktrace || EXIT_STATUS=$?
+  ./gradlew -PartifactoryRepoKey=libs-release-local -PexternalVersion=$TRAVIS_TAG artifactoryPublish --stacktrace || EXIT_STATUS=$?
 
 }
 

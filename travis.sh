@@ -33,7 +33,7 @@ function build_snapshot() {
 # Builds a Pull Request
 function build_pullrequest() {
   echo -e "Building pull request #$TRAVIS_PULL_REQUEST of branch [$TRAVIS_BRANCH]. Won't publish anything to Artifactory."
-  ./gradlew clean build || EXIT_STATUS=$?
+  ./gradlew publishToMavenLocal rat || EXIT_STATUS=$?
 }
 
 # For other branches we need to add branch name as prefix
